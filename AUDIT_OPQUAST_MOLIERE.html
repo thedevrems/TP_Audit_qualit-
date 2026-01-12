@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Qualité Web - Site Molière</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        h1 {
+            color: #1a73e8;
+            font-size: 28pt;
+            margin-bottom: 10pt;
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 10pt;
+        }
+
+        h2 {
+            color: #1a73e8;
+            font-size: 20pt;
+            margin-top: 24pt;
+            margin-bottom: 12pt;
+            border-bottom: 2px solid #e8eaed;
+            padding-bottom: 6pt;
+        }
+
+        h3 {
+            color: #5f6368;
+            font-size: 16pt;
+            margin-top: 18pt;
+            margin-bottom: 10pt;
+        }
+
+        h4 {
+            color: #202124;
+            font-size: 14pt;
+            margin-top: 14pt;
+            margin-bottom: 8pt;
+            font-weight: 600;
+        }
+
+        .metadata {
+            background-color: #f1f3f4;
+            padding: 15pt;
+            border-radius: 8px;
+            margin-bottom: 20pt;
+        }
+
+        .metadata p {
+            margin: 5pt 0;
+            font-size: 11pt;
+        }
+
+        .constat {
+            background-color: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 20pt;
+            margin-bottom: 24pt;
+            box-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+        }
+
+        .constat-header {
+            background-color: #f8f9fa;
+            padding: 12pt;
+            margin: -20pt -20pt 15pt -20pt;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 2px solid #1a73e8;
+        }
+
+        .constat-title {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 8pt;
+        }
+
+        .badge-regle {
+            background-color: #1a73e8;
+            color: white;
+            padding: 4pt 10pt;
+            border-radius: 12px;
+            font-size: 10pt;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 8pt;
+        }
+
+        .badge-categorie {
+            background-color: #34a853;
+            color: white;
+            padding: 4pt 10pt;
+            border-radius: 12px;
+            font-size: 10pt;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-p1 {
+            background-color: #ea4335;
+            color: white;
+            padding: 6pt 12pt;
+            border-radius: 4px;
+            font-size: 11pt;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10pt;
+        }
+
+        .badge-p2 {
+            background-color: #fbbc04;
+            color: #202124;
+            padding: 6pt 12pt;
+            border-radius: 4px;
+            font-size: 11pt;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10pt;
+        }
+
+        .badge-p3 {
+            background-color: #34a853;
+            color: white;
+            padding: 6pt 12pt;
+            border-radius: 4px;
+            font-size: 11pt;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10pt;
+        }
+
+        .section-content {
+            margin-top: 12pt;
+        }
+
+        .section-label {
+            font-weight: 600;
+            color: #5f6368;
+            font-size: 11pt;
+            text-transform: uppercase;
+            margin-top: 12pt;
+            margin-bottom: 6pt;
+        }
+
+        .section-text {
+            color: #202124;
+            font-size: 11pt;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border-left: 4px solid #1a73e8;
+            padding: 12pt;
+            margin: 10pt 0;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            overflow-x: auto;
+            border-radius: 4px;
+        }
+
+        .localisation {
+            background-color: #e8f0fe;
+            padding: 8pt 12pt;
+            border-radius: 4px;
+            font-size: 10pt;
+            color: #1967d2;
+            font-weight: 600;
+            margin-bottom: 12pt;
+        }
+
+        .impact-box {
+            background-color: #fef7e0;
+            border-left: 4px solid #fbbc04;
+            padding: 12pt;
+            margin: 12pt 0;
+            border-radius: 4px;
+        }
+
+        .amelioration-box {
+            background-color: #e6f4ea;
+            border-left: 4px solid #34a853;
+            padding: 12pt;
+            margin: 12pt 0;
+            border-radius: 4px;
+        }
+
+        ul {
+            margin-left: 20pt;
+            margin-top: 8pt;
+            margin-bottom: 8pt;
+        }
+
+        li {
+            margin-bottom: 6pt;
+            font-size: 11pt;
+        }
+
+        .synthese-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20pt 0;
+            font-size: 11pt;
+        }
+
+        .synthese-table th {
+            background-color: #1a73e8;
+            color: white;
+            padding: 12pt;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .synthese-table td {
+            padding: 10pt 12pt;
+            border: 1px solid #dadce0;
+        }
+
+        .synthese-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .positifs-box {
+            background-color: #e6f4ea;
+            border: 2px solid #34a853;
+            padding: 15pt;
+            border-radius: 8px;
+            margin: 20pt 0;
+        }
+
+        .recommandations-box {
+            background-color: #fce8e6;
+            border: 2px solid #ea4335;
+            padding: 15pt;
+            border-radius: 8px;
+            margin: 20pt 0;
+        }
+
+        .separator {
+            height: 2px;
+            background: linear-gradient(to right, #1a73e8, #34a853, #fbbc04, #ea4335);
+            margin: 30pt 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Audit Qualité Web - Site Molière</h1>
+<h2 style="color: #5f6368; font-size: 16pt; margin-top: 0;">Référentiel Opquast - 245 règles (2025)</h2>
+
+<div class="metadata">
+    <p><strong>Auditeur :</strong> Consultant Qualité Web</p>
+    <p><strong>Date :</strong> 12 janvier 2026</p>
+    <p><strong>Pages auditées :</strong></p>
+    <ul style="margin-left: 20pt; margin-top: 5pt;">
+        <li>Page Accueil (index.html)</li>
+        <li>Page Infos & Réservation (infos.html)</li>
+    </ul>
+</div>
+
+<hr class="separator">
+
+<h2>Constats identifiés (10 problèmes)</h2>
+
+<h3>CATÉGORIE : FORMULAIRES (3 constats)</h3>
+
+<!-- Constat 1 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°1 - Formulaire</div>
+        <span class="badge-regle">Règle n°99</span>
+        <span class="badge-categorie">Formulaires</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Chaque champ de formulaire est associé dans le code source à une étiquette qui lui est propre</p>
+
+        <div class="localisation">
+            📍 Page Infos & Réservation - Section formulaire de réservation (lignes 100-118)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Les champs de formulaire (Prénom, Nom, Email, Nombre de places) possèdent des balises <code>&lt;label&gt;</code> visuellement présentes, mais elles ne sont pas associées techniquement aux champs via les attributs <code>for</code> et <code>id</code>. Par exemple, ligne 101-103 :</p>
+
+        <div class="code-block">&lt;label&gt;Prénom&lt;/label&gt;
+&lt;input type="text" name="prenom" /&gt;</div>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran (NVDA, JAWS, VoiceOver)</p>
+            <p class="section-text"><strong>Conséquence :</strong> Le lecteur d'écran annonce uniquement "champ de texte vide" sans indiquer ce qu'il faut saisir. L'utilisateur doit deviner le contexte ou explorer manuellement la page.</p>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Associer chaque label à son champ en ajoutant un attribut <code>id</code> unique sur chaque input et l'attribut <code>for</code> correspondant sur chaque label. Exemple : <code>&lt;label for="prenom"&gt;Prénom&lt;/label&gt;</code> et <code>&lt;input type="text" id="prenom" name="prenom" /&gt;</code>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 2 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°2 - Formulaire</div>
+        <span class="badge-regle">Règle n°98</span>
+        <span class="badge-categorie">Formulaires</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Les champs de formulaire sont regroupés par thématiques à l'aide de balises appropriées</p>
+
+        <div class="localisation">
+            📍 Page Infos & Réservation - Formulaire de réservation (lignes 95-164)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Le formulaire de réservation n'est pas encapsulé dans une balise <code>&lt;form&gt;</code>. Les champs sont placés directement dans une <code>&lt;div&gt;</code> (ligne 99). Il n'y a pas de balise form avec attributs action et method.</p>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Tous les utilisateurs, notamment ceux utilisant des technologies d'assistance</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Les gestionnaires de mots de passe ne détectent pas le formulaire</li>
+                <li>Impossible de soumettre avec la touche Entrée</li>
+                <li>Les lecteurs d'écran n'annoncent pas le début/fin du formulaire</li>
+                <li>Navigation entre champs (Shift+Tab) moins intuitive</li>
+            </ul>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Encapsuler tous les champs dans une balise <code>&lt;form&gt;</code> avec les attributs <code>action</code> et <code>method</code> appropriés. Structurer les groupes de champs connexes avec des <code>&lt;fieldset&gt;</code> et <code>&lt;legend&gt;</code> (déjà partiellement fait pour l'accessibilité lignes 133-153).</p>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 3 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°3 - Formulaire</div>
+        <span class="badge-regle">Règle n°103</span>
+        <span class="badge-categorie">Formulaires</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Les boutons d'envoi de formulaire ont un intitulé explicite</p>
+
+        <div class="localisation">
+            📍 Page Infos & Réservation - Bouton d'envoi du formulaire (lignes 159-161)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Le bouton d'envoi du formulaire ne contient qu'une icône Font Awesome sans texte :</p>
+
+        <div class="code-block">&lt;button class="btn"&gt;
+  &lt;i class="fas fa-paper-plane"&gt;&lt;/i&gt;
+&lt;/button&gt;</div>
+
+        <p class="section-text">Aucun texte visible ni attribut <code>aria-label</code> pour expliciter l'action.</p>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran, utilisateurs ayant désactivé les icônes, utilisateurs avec déficience cognitive</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Le lecteur d'écran annonce uniquement "bouton" sans préciser son rôle</li>
+                <li>Utilisateurs visuels ne comprennent pas forcément qu'une icône d'avion en papier signifie "envoyer"</li>
+                <li>Confusion possible avec d'autres actions</li>
+            </ul>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Ajouter un texte explicite dans le bouton ("Envoyer ma réservation" ou "Valider") accompagné de l'icône, ou à défaut ajouter un attribut <code>aria-label="Envoyer ma réservation"</code> sur le bouton.</p>
+        </div>
+    </div>
+</div>
+
+<hr class="separator">
+
+<h3>CATÉGORIE : CONTENUS (3 constats)</h3>
+
+<!-- Constat 4 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°4 - Images</div>
+        <span class="badge-regle">Règle n°1</span>
+        <span class="badge-categorie">Contenus</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Chaque image porteuse d'information est dotée d'une alternative textuelle appropriée</p>
+
+        <div class="localisation">
+            📍 Page Accueil - Image héros (ligne 45)<br>
+            📍 Page Accueil - Galerie photos (ligne 157)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Deux images ne possèdent pas d'attribut <code>alt</code> :</p>
+        <ol>
+            <li>L'image principale du héros <code>&lt;img src="images/moliere.png" class="hero-image" /&gt;</code> (ligne 45)</li>
+            <li>Une image de la galerie <code>&lt;img src="images/scene1.png" /&gt;</code> (ligne 157)</li>
+        </ol>
+        <p class="section-text">Une autre image possède un alt trop vague : <code>alt="Image d'une belle scène"</code> (ligne 96) qui ne décrit pas le contenu informationnel.</p>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran, utilisateurs avec images désactivées, référencement</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Le lecteur d'écran ignore complètement l'image ou annonce le nom du fichier ("moliere.png")</li>
+                <li>Perte d'information contextuelle importante</li>
+                <li>Mauvaise compréhension du contenu de la page</li>
+            </ul>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Ajouter des alternatives textuelles descriptives et pertinentes pour toutes les images porteuses d'information. Exemples :</p>
+            <ul>
+                <li>Image héros : <code>alt="Affiche du spectacle musical Molière avec les acteurs principaux en costume d'époque"</code></li>
+                <li>Image galerie : <code>alt="Scène du spectacle montrant les comédiens dans une chorégraphie"</code></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 5 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°5 - Icônes décoratives</div>
+        <span class="badge-regle">Règle n°2</span>
+        <span class="badge-categorie">Contenus</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Chaque image de décoration est dotée d'une alternative textuelle vide</p>
+
+        <div class="localisation">
+            📍 Page Accueil - Bouton CTA (ligne 50)<br>
+            📍 Page Accueil - Section chiffres clés (lignes 130, 135)<br>
+            📍 Page Accueil - Réseaux sociaux (lignes 229, 237, 245)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Les icônes décoratives Font Awesome utilisent incorrectement l'attribut <code>alt</code> qui n'est pas valide sur les balises <code>&lt;i&gt;</code> :</p>
+
+        <div class="code-block">&lt;i class="fas fa-ticket-alt" alt="Icône billet"&gt;&lt;/i&gt;
+&lt;i class="fas fa-users" alt="Icône utilisateurs"&gt;&lt;/i&gt;</div>
+
+        <p class="section-text">Seule une icône utilise correctement <code>aria-hidden="true"</code> (ligne 140).</p>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Les lecteurs d'écran peuvent lire le caractère Unicode de l'icône de façon incompréhensible</li>
+                <li>L'attribut <code>alt</code> sur <code>&lt;i&gt;</code> n'est pas reconnu et crée du code HTML invalide</li>
+                <li>Pollution sonore inutile pour les utilisateurs de technologies d'assistance</li>
+            </ul>
+        </div>
+
+        <span class="badge-p2">P2 - IMPORTANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Pour les icônes purement décoratives (accompagnées de texte), ajouter <code>aria-hidden="true"</code> sur toutes les balises <code>&lt;i&gt;</code> et supprimer les attributs <code>alt</code> invalides. Si l'icône porte une information seule, utiliser <code>role="img"</code> et <code>aria-label</code> avec une description pertinente.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 6 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°6 - Liens explicites</div>
+        <span class="badge-regle">Règle n°127</span>
+        <span class="badge-categorie">Contenus</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Le libellé de chaque lien décrit sa fonction ou la nature du contenu vers lequel il pointe</p>
+
+        <div class="localisation">
+            📍 Page Accueil - Bouton CTA héros (lignes 49-52)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Le bouton d'action principal de la page contient uniquement le texte "Cliquez ici" :</p>
+
+        <div class="code-block">&lt;a href="infos.html#billetterie" class="btn"&gt;
+  &lt;i class="fas fa-ticket-alt" alt="Icône billet"&gt;&lt;/i&gt;
+  &lt;span&gt;Cliquez ici&lt;/span&gt;
+&lt;/a&gt;</div>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran naviguant par liste de liens, utilisateurs avec déficiences cognitives, référencement</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Hors contexte, le lien "Cliquez ici" n'indique pas vers quoi il pointe</li>
+                <li>Les lecteurs d'écran peuvent lister tous les liens : plusieurs "Cliquez ici" identiques perdent leur sens</li>
+                <li>Mauvaise expérience utilisateur et mauvaises pratiques SEO</li>
+            </ul>
+        </div>
+
+        <span class="badge-p2">P2 - IMPORTANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Remplacer "Cliquez ici" par un intitulé explicite décrivant l'action, par exemple : "Réserver vos places", "Accéder à la billetterie" ou "Voir les tarifs et réserver".</p>
+        </div>
+    </div>
+</div>
+
+<hr class="separator">
+
+<h3>CATÉGORIE : STRUCTURE ET NAVIGATION (3 constats)</h3>
+
+<!-- Constat 7 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°7 - Hiérarchie de titres</div>
+        <span class="badge-regle">Règle n°226</span>
+        <span class="badge-categorie">Structure</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">La hiérarchie des titres de contenu est cohérente</p>
+
+        <div class="localisation">
+            📍 Page Accueil - Plusieurs sections
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">La hiérarchie des titres présente plusieurs incohérences :</p>
+        <ol>
+            <li>Un <code>&lt;h3&gt;</code> (ligne 47) apparaît avant le premier <code>&lt;h2&gt;</code> (ligne 74)</li>
+            <li>Passage direct de <code>&lt;h3&gt;</code> à <code>&lt;h6&gt;</code> (ligne 59) sans niveaux intermédiaires</li>
+            <li>Utilisation de <code>&lt;h4&gt;</code> (ligne 109) après <code>&lt;h2&gt;</code> de manière incohérente</li>
+            <li>Pas de <code>&lt;h1&gt;</code> sur la page Accueil (présent uniquement sur infos.html)</li>
+        </ol>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran, utilisateurs naviguant par titres, robots d'indexation</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Navigation par titres (raccourci clavier H) devient confuse et non logique</li>
+                <li>Structure du document incompréhensible pour les technologies d'assistance</li>
+                <li>Mauvaise hiérarchisation de l'information</li>
+                <li>Impact négatif sur le référencement (absence de H1)</li>
+            </ul>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Restructurer la hiérarchie des titres de manière logique et séquentielle :</p>
+            <ul>
+                <li>Ajouter un <code>&lt;h1&gt;</code> unique en haut de page (par exemple sur "Molière, le spectacle musical")</li>
+                <li>Respecter l'ordre h1 &gt; h2 &gt; h3 &gt; h4 sans sauter de niveaux</li>
+                <li>Utiliser les niveaux selon l'importance sémantique du contenu, pas selon le style visuel souhaité</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 8 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°8 - Indicateur de focus</div>
+        <span class="badge-regle">Règle n°185</span>
+        <span class="badge-categorie">Navigation</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Les éléments interactifs sont visuellement identifiables au focus clavier</p>
+
+        <div class="localisation">
+            📍 style.css - Boutons (ligne 196)<br>
+            📍 style.css - Champs de formulaire (ligne 453)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Le CSS supprime l'indicateur visuel de focus sur les éléments interactifs :</p>
+
+        <div class="code-block">.btn:hover,
+.btn:focus {
+  outline: none; /* ligne 196 */
+}
+
+.section-intro input:focus,
+.section-intro select:focus,
+.section-intro textarea:focus {
+  outline: none; /* ligne 453 */
+}</div>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs naviguant au clavier (mobilité réduite, handicap moteur, utilisateurs experts)</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Impossible de savoir visuellement quel élément a le focus lors de la navigation au clavier (Tab)</li>
+                <li>Perte de repères et confusion lors du remplissage de formulaires</li>
+                <li>Navigation clavier totalement inaccessible</li>
+            </ul>
+        </div>
+
+        <span class="badge-p1">P1 - BLOQUANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Ne jamais supprimer <code>outline</code> sans le remplacer par un indicateur visuel équivalent. Conserver <code>outline</code> ou créer un style de focus personnalisé visible (bordure épaisse, changement de couleur, ombre portée, etc.) respectant un ratio de contraste suffisant (3:1 minimum avec l'état par défaut).</p>
+        </div>
+    </div>
+</div>
+
+<!-- Constat 9 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°9 - Rôles ARIA redondants</div>
+        <span class="badge-regle">Règle n°227</span>
+        <span class="badge-categorie">Structure</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Les rôles, propriétés et états ARIA sont utilisés en respectant les règles de l'API ARIA</p>
+
+        <div class="localisation">
+            📍 Page Accueil - Section héros (ligne 34)<br>
+            📍 Page Infos & Réservation - Header (ligne 36)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">Des rôles ARIA sont utilisés de manière redondante ou inappropriée :</p>
+        <ol>
+            <li><code>&lt;div class="hero" role="banner"&gt;</code> (index.html, ligne 34) - une div avec role="banner" au lieu d'un <code>&lt;header&gt;</code></li>
+            <li><code>&lt;header class="hero" role="banner"&gt;</code> (infos.html, ligne 36) - role="banner" redondant car <code>&lt;header&gt;</code> a déjà ce rôle implicite au niveau racine</li>
+        </ol>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs de lecteurs d'écran</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Code HTML non conforme aux bonnes pratiques ARIA</li>
+                <li>Risque de confusion avec plusieurs éléments banner (maximum 1 par page)</li>
+                <li>Pollution sémantique inutile</li>
+                <li>Maintenance du code plus difficile</li>
+            </ul>
+        </div>
+
+        <span class="badge-p3">P3 - AMÉLIORATION</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Utiliser les balises HTML sémantiques natives plutôt que des rôles ARIA :</p>
+            <ul>
+                <li>Remplacer <code>&lt;div role="banner"&gt;</code> par <code>&lt;header&gt;</code> (qui a le rôle banner implicite)</li>
+                <li>Supprimer <code>role="banner"</code> sur les <code>&lt;header&gt;</code> déjà présents</li>
+                <li>Réserver ARIA aux situations où HTML natif ne suffit pas</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<hr class="separator">
+
+<h3>CATÉGORIE : PRÉSENTATION (1 constat)</h3>
+
+<!-- Constat 10 -->
+<div class="constat">
+    <div class="constat-header">
+        <div class="constat-title">Constat n°10 - Iframe</div>
+        <span class="badge-regle">Règle n°146</span>
+        <span class="badge-categorie">Présentation</span>
+    </div>
+
+    <div class="section-content">
+        <h4>Règle Opquast</h4>
+        <p class="section-text">Chaque iframe est dotée d'un titre (title) pertinent</p>
+
+        <div class="localisation">
+            📍 Page Infos & Réservation - Carte Google Maps (lignes 81-90)
+        </div>
+
+        <div class="section-label">Description factuelle</div>
+        <p class="section-text">L'iframe Google Maps possède bien un attribut <code>title="Carte du Zénith de Paris"</code> (ligne 88), ce qui est conforme. Cependant, l'attribut <code>tabindex="-1"</code> (ligne 89) retire complètement l'iframe de l'ordre de navigation au clavier.</p>
+
+        <div class="impact-box">
+            <div class="section-label">Impact utilisateur</div>
+            <p class="section-text"><strong>Pour qui :</strong> Utilisateurs naviguant au clavier souhaitant interagir avec la carte</p>
+            <p class="section-text"><strong>Conséquence :</strong></p>
+            <ul>
+                <li>Impossible d'accéder à la carte avec le clavier seul (Tab)</li>
+                <li>Les fonctionnalités de zoom, déplacement de la carte sont inaccessibles au clavier</li>
+                <li>Discrimination envers les utilisateurs ne pouvant pas utiliser une souris</li>
+            </ul>
+        </div>
+
+        <span class="badge-p2">P2 - IMPORTANT</span>
+
+        <div class="amelioration-box">
+            <div class="section-label">Piste d'amélioration</div>
+            <p class="section-text">Supprimer l'attribut <code>tabindex="-1"</code> pour permettre l'accès au clavier. Si l'objectif était d'éviter un piège au clavier, ajouter plutôt un lien d'évitement avant l'iframe permettant de la contourner ("Passer la carte"), tout en la laissant accessible.</p>
+        </div>
+    </div>
+</div>
+
+<hr class="separator">
+
+<h2>Synthèse de l'audit</h2>
+
+<h3>Répartition des constats</h3>
+
+<table class="synthese-table">
+    <tr>
+        <th>Catégorie</th>
+        <th>Nombre de constats</th>
+        <th>Conformité</th>
+    </tr>
+    <tr>
+        <td><strong>Formulaires</strong></td>
+        <td>3 constats</td>
+        <td>✅ Conformité atteinte</td>
+    </tr>
+    <tr>
+        <td><strong>Contenus</strong></td>
+        <td>3 constats</td>
+        <td>✅ Conformité atteinte</td>
+    </tr>
+    <tr>
+        <td><strong>Structure et Navigation</strong></td>
+        <td>3 constats</td>
+        <td>✅ Conformité atteinte</td>
+    </tr>
+    <tr>
+        <td><strong>Présentation</strong></td>
+        <td>1 constat</td>
+        <td>-</td>
+    </tr>
+</table>
+
+<h3>Répartition par priorité</h3>
+
+<table class="synthese-table">
+    <tr>
+        <th>Priorité</th>
+        <th>Nombre de constats</th>
+        <th>Numéros</th>
+    </tr>
+    <tr>
+        <td><span class="badge-p1">P1 - Bloquant</span></td>
+        <td>5 constats</td>
+        <td>n°1, n°2, n°4, n°7, n°8</td>
+    </tr>
+    <tr>
+        <td><span class="badge-p2">P2 - Important</span></td>
+        <td>4 constats</td>
+        <td>n°5, n°6, n°10</td>
+    </tr>
+    <tr>
+        <td><span class="badge-p3">P3 - Amélioration</span></td>
+        <td>1 constat</td>
+        <td>n°9</td>
+    </tr>
+</table>
+
+<div class="recommandations-box">
+    <h3>⚠️ Recommandations prioritaires</h3>
+
+    <p><strong>Les 3 problèmes les plus critiques à corriger en priorité :</strong></p>
+
+    <ol>
+        <li><strong>Formulaire sans structure</strong> (Constat n°2) - Encapsuler dans une balise <code>&lt;form&gt;</code></li>
+        <li><strong>Labels non associés</strong> (Constat n°1) - Associer tous les labels avec for/id</li>
+        <li><strong>Indicateurs de focus supprimés</strong> (Constat n°8) - Rétablir les indicateurs visuels</li>
+    </ol>
+
+    <p style="margin-top: 12pt;"><strong>Impact :</strong> Ces corrections amélioreront significativement l'accessibilité du site pour les utilisateurs de technologies d'assistance et de navigation clavier.</p>
+</div>
+
+<div class="positifs-box">
+    <h3>✅ Points positifs observés</h3>
+
+    <ul>
+        <li>Présence de <code>aria-current="page"</code> sur les liens de navigation active</li>
+        <li>Utilisation de <code>rel="noopener noreferrer"</code> sur les liens externes</li>
+        <li>Certaines régions ARIA bien utilisées avec <code>aria-labelledby</code></li>
+        <li>Fieldset correctement utilisé pour les checkboxes d'accessibilité</li>
+        <li>Attribut <code>lang="fr"</code> présent sur le HTML</li>
+        <li>Responsive design mis en place</li>
+    </ul>
+</div>
+
+<hr class="separator">
+
+<div style="text-align: center; color: #5f6368; font-size: 10pt; margin-top: 30pt;">
+    <p><strong>Fin de l'audit</strong></p>
+    <p>Document généré le 12 janvier 2026</p>
+</div>
+
+</body>
+</html>
